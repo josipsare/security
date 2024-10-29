@@ -1,0 +1,26 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npm run clean && tsc",
+    "clean": "shx rm -rf main/dist",
+    "start": "npm run build && node dist/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.8.1",
+    "cors": "^2.8.5",
+    "escape-html": "^1.0.3",
+    "express": "^4.21.1",
+    "shx": "^0.3.4"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/escape-html": "^1.0.4"
+  }
+}
