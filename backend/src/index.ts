@@ -116,7 +116,7 @@ app.get('/helloBad', (req, res) => {
 })
 
 app.listen(443, () => {
-    console.log('server listening on port 8080')
+    console.log('server listening on port 443')
 })
 //XSS
 //Broken Access Control
