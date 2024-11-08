@@ -90,7 +90,7 @@ app.get('/user', (req, res) => {
 
     if (accNumber) {
         const accDetails = userInfo[accNumber];
-        res.send(accDetails);
+        res.status(200).send(accDetails);
     } else {
         res.status(403).send('Access Denied: Invalid or expired reference');
     }
