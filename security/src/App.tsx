@@ -7,7 +7,10 @@ function App() {
     const [hint, setHint] = useState('');
     const [xss, setXss] = useState(true);
     const [accountName, setAccountName] = useState('');
+    const [loggedIn, setLoggedIn] = useState(false);
     const [accountNumber, setAccountNumber] = useState('');
+    const [tempId, setTempId] = useState('');
+    const [bda, setBda] = useState(false);
 
 
     const handleChange = (e:any) => {
@@ -44,34 +47,31 @@ function App() {
         setXss(!xss);
     }
 
-    async function viewBalance(accountNumber: string) {
-        try {
-            const res = await fetch(`http://localhost:8080/user?accnum=${accountNumber}`, {
-                method: 'GET'
-            });
-
-
-            // Wait for the JSON response
-            const info = await res.json();
-            console.log(info); // Now this will log the actual response data
-        } catch (error) {
-            console.error('Error fetching balance:', error);
-        }
-    }
-
     const handleBDASubmit = async (event: any) => {
         event.preventDefault();
         try {
-            const accName: string = accountName;
-            const res = await fetch(`http://localhost:8080/accountInfo?accname=${accName}`)
-            const text = await res.json(); // Assuming the response is JSON
-            setAccountNumber(text.accNumber); // Set the account number state
-            console.log(accountNumber); // Log the whole response to see what you're getting
-            return viewBalance(accountNumber)
+            if (bda) {
+                setLoggedIn(true);
+                const accName: string = accountName;
+                const res = await fetch(`http://localhost:8080/accountInfo?accname=${accName}`)
+                const text = await res.json();
+                setAccountNumber(text.accNumber);
+                console.log(accountNumber);
+            } else {
+                setLoggedIn(true);
+                const accName = accountName;
+                const res = await fetch(`http://localhost:8080/generateTempId?accname=${accName}`);
+                const data = await res.json();
+                setTempId(data.tempId);
+            }
         } catch (error) {
             console.error('Error:', error);
         }
     };
+
+    function handleBdaToggle() {
+        setBda(!bda)
+    }
 
     return (
         <div>
@@ -90,7 +90,7 @@ function App() {
                     type="text"
                     value={name}
                     onChange={handleChange}
-                    placeholder="input your name"
+                    placeholder="Type your name"
                 />
                 <button type="submit">Hello</button>
             </form>
@@ -98,6 +98,15 @@ function App() {
             <h1>
                 Bad Access Control
             </h1>
+            <label>
+                <input
+                    type="checkbox"
+                    checked={bda}
+                    onChange={handleBdaToggle}
+                />
+                Enable BDA attack
+            </label>
+            <p>Hint: your name is Alice</p>
             <form onSubmit={handleBDASubmit}>
                 <input
                     type="text"
@@ -105,11 +114,32 @@ function App() {
                     onChange={handleAccountNameChange}
                     placeholder="Type your name"
                 />
-                <button type="submit">Submit</button>
+                <button type="submit">Get Account ID</button>
             </form>
+            {loggedIn && tempId && !bda && (
+                <div>
+                    <h2>Welcome, {accountName}!</h2>
+                    <p>Your temporary ID is: {tempId}</p>
+                    <a href={`http://localhost:8080/user?tempId=${tempId}`}>
+                        Visit balance sheet
+                    </a>
+                </div>
+            )}
+            {loggedIn && bda &&(
+                <div>
+                    <h2>Welcome, {accountName}!</h2>
+                    <p>Your account number is: {accountNumber}</p>
+                    <p>Hint: access control is not very good, try increasing or decreasing the account number in the URL</p>
+                    <a href={"http://localhost:8080/userWeak?accnum=" + accountNumber}>
+                        Visit balance sheet
+                    </a>
+                </div>
+            )}
         </div>
 
     );
 }
 
 export default App;
+
+
