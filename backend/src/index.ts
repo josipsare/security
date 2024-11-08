@@ -64,21 +64,17 @@ app.get('/generateTempId', (req, res) => {
 });
 
 app.get("/", (req, res) => {
-    console.log('getting started');
-    res.send("Hello World!");
+    res.status(200).send("Hello World!");
 })
 
 app.get('/accountInfo', (req, res) => {
-    console.log('u accountInfo sam');
     const accName = req.query.accname as string;
-    console.log(`Requested account for: ${accName}`);
     const accNumber = users[accName];
     res.send(accNumber);
 })
 
 app.get('/userWeak', (req, res) => {
     const accNum = req.query.accnum as string;
-    console.log(`Requested account for: ${accNum}`);
     const accDetails = userInfo[accNum];
     res.send(accDetails);
 })
@@ -104,14 +100,12 @@ app.get('/helloStrong', (req, res) => {
 
     const safeName = typeof name === 'string' ? escapeHtml(name) : 'Guest';
 
-    console.log(safeName)
     res.send(`<p>Hello ${safeName}!</p>`);
 })
 
 
 app.get('/helloBad', (req, res) => {
     const { name } = req.query;
-    console.log(name)
     res.send(`<p>Hello ${name}!</p>`);
 })
 

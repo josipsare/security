@@ -32,7 +32,6 @@ function App() {
         try {
             const encodedName:string = xss ? name : encodeURIComponent(name);
             const path:string = xss ? 'helloBad' : 'helloStrong'
-            console.log(encodedName);
             const res = await fetch(`${URL}:${port}/${path}?name=${encodedName}`);
             const text = await res.text();
             setResponse(text);
@@ -58,7 +57,6 @@ function App() {
                 const res = await fetch(`${URL}:${port}/accountInfo?accname=${accName}`)
                 const text = await res.json();
                 setAccountNumber(text.accNumber);
-                console.log(accountNumber);
             } else {
                 setLoggedIn(true);
                 const accName = accountName;
