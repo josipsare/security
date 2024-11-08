@@ -11,6 +11,7 @@ function App() {
     const [accountNumber, setAccountNumber] = useState('');
     const [tempId, setTempId] = useState('');
     const [bda, setBda] = useState(false);
+    const URL = "https://security-no4s.onrender.com"
 
 
     const handleChange = (e:any) => {
@@ -31,7 +32,7 @@ function App() {
             const encodedName:string = xss ? name : encodeURIComponent(name);
             const path:string = xss ? 'helloBad' : 'helloStrong'
             console.log(encodedName);
-            const res = await fetch(`http://localhost:8080/${path}?name=${encodedName}`);
+            const res = await fetch(`${URL}:8080/${path}?name=${encodedName}`);
             const text = await res.text();
             setResponse(text);
         } catch (error) {
@@ -53,14 +54,14 @@ function App() {
             if (bda) {
                 setLoggedIn(true);
                 const accName: string = accountName;
-                const res = await fetch(`http://localhost:8080/accountInfo?accname=${accName}`)
+                const res = await fetch(`${URL}:8080/accountInfo?accname=${accName}`)
                 const text = await res.json();
                 setAccountNumber(text.accNumber);
                 console.log(accountNumber);
             } else {
                 setLoggedIn(true);
                 const accName = accountName;
-                const res = await fetch(`http://localhost:8080/generateTempId?accname=${accName}`);
+                const res = await fetch(`${URL}:8080/generateTempId?accname=${accName}`);
                 const data = await res.json();
                 setTempId(data.tempId);
             }
@@ -120,7 +121,7 @@ function App() {
                 <div>
                     <h2>Welcome, {accountName}!</h2>
                     <p>Your temporary ID is: {tempId}</p>
-                    <a href={`http://localhost:8080/user?tempId=${tempId}`}>
+                    <a href={`${URL}:8080/user?tempId=${tempId}`}>
                         Visit balance sheet
                     </a>
                 </div>
@@ -130,7 +131,7 @@ function App() {
                     <h2>Welcome, {accountName}!</h2>
                     <p>Your account number is: {accountNumber}</p>
                     <p>Hint: access control is not very good, try increasing or decreasing the account number in the URL</p>
-                    <a href={"http://localhost:8080/userWeak?accnum=" + accountNumber}>
+                    <a href={`${URL}:8080/userWeak?accnum=` + accountNumber}>
                         Visit balance sheet
                     </a>
                 </div>
