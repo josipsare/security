@@ -3,9 +3,13 @@ import cors from 'cors';
 import escapeHtml from 'escape-html'
 import crypto from 'crypto';
 const app = express();
-app.use(cors({
-    origin: 'https://security-front.onrender.com/'
-}));
+const corsOptions = {
+    origin: 'https://security-front.onrender.com',
+    methods: 'GET, POST, PUT, DELETE',
+    allowedHeaders: 'Content-Type, Authorization'
+};
+
+app.use(cors(corsOptions));
 
 
 type User = {
